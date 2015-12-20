@@ -53,7 +53,8 @@ void *threadLogic(void *arg)
 }
 
 int main(int argc, char *argv[])
-{   
+{ 
+    printf("%ld",RAND_MAX);
     // Check & prepare parameters
     if (argc != 3)
     {
