@@ -1,0 +1,67 @@
+; get number from input 
+; print 0x1 if it's prime, 0x0 if not
+; largest prime it can detect correctly is 32749
+; larger primes cause integer overflow in emulator
+
+LD  0 500
+LD  1 501
+LD  2 502
+LD  3 503
+LD  6 506
+
+;   [500] = 0
+;   [501] = 1
+;   [502] = 2
+;   [503] = 3
+;   [506] = 6
+
+JMP 36              ; #25           : -> START 
+
+PRT 501             ; #28   TRUE    
+STP
+
+PRT 500             ; #32   FALSE   
+STP
+
+INP 10              ; #36   START   : [10] <- INPUT
+CMP 10, 501         ;               : compare(n, 1)
+JNG 32              ;               : n <= 1 -> FALSE
+
+CMP 10 503          ;               : compare(n, 3)
+JNG 28              ;               : n <= 3 -> TRUE
+
+MOV 502 102
+MOV 10 110
+MOD 102 110         ;               : [110] = [110](n) % 2
+CMP 110 500         ;               : compare(n%2, 0)
+JEQ 32              ;               : n % 2 == 0 -> FALSE
+
+MOV 503 103
+MOV 10 110
+MOD 103 110         ;               : [103] = n % 3
+CMP 110 500         ;               : compare(n % 3, 0)
+JEQ 32              ;               : n%3 == 0 -> FALSE
+
+LD  5 24            ;               : [24] = i = 5
+
+MOV 24 25           ; #106 LOOP     : [25] = i
+MOV 24 26           ;               : [27] = i
+MOV 24 27
+MUL 27 27
+CMP 27 10           ;               : compare(i^2, n)
+JGE 28              ;               : i^2 <= n -> TRUE
+MOV 10 110          ;               : [110] = n
+MOD 25 110          ;               : [110] = n % i
+CMP 110 500         ;               : compare(n % i, 0)
+JEQ 32              ;               : n % i == 0 -> FALSE
+
+ADD 502 26          :               : [26] = i + 2
+MOV 10 110          ;               : [110] = n
+MOD 26 110          ;               : [26] = n % (i + 2)
+CMP 110 500         ;               : compare(n % (i + 2), 0)
+JEQ 32              ;               : n % (i+2) == 0 -> FALSE
+ADD 506 24          ;               : [24] = i + 6
+JMP 106             ;               : -> LOOP
+
+
+
